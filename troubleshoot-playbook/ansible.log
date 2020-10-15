@@ -1,0 +1,162 @@
+2020-10-01 10:20:34,513 p=11812 u=curso n=ansible | ERROR! We were unable to read either as JSON nor YAML, these are the errors we got from each:
+JSON: No JSON object could be decoded
+
+Syntax Error while loading YAML.
+  mapping values are not allowed in this context
+
+The error appears to be in '/home/curso/ansible2/troubleshoot-playbook/samba.yml': line 8, column 30, but may
+be elsewhere in the file depending on the exact syntax problem.
+
+The offending line appears to be:
+
+    install_state: present
+    random_var: This is colon: test
+                             ^ here
+
+2020-10-01 10:21:52,314 p=11930 u=curso n=ansible | ERROR! We were unable to read either as JSON nor YAML, these are the errors we got from each:
+JSON: No JSON object could be decoded
+
+Syntax Error while loading YAML.
+  found unacceptable key (unhashable type: 'AnsibleMapping')
+
+The error appears to be in '/home/curso/ansible2/troubleshoot-playbook/samba.yml': line 14, column 15, but may
+be elsewhere in the file depending on the exact syntax problem.
+
+The offending line appears to be:
+
+      name: samba
+      state: {{ install_state }}
+              ^ here
+We could be wrong, but this one looks like it might be an issue with
+missing quotes. Always quote template expression brackets when they
+start a value. For instance:
+
+    with_items:
+      - {{ foo }}
+
+Should be written as:
+
+    with_items:
+      - "{{ foo }}"
+
+2020-10-01 10:22:44,690 p=11991 u=curso n=ansible | PLAY [Install a samba server] *****************************************************************************************
+2020-10-01 10:22:44,701 p=11991 u=curso n=ansible | TASK [Gathering Facts] ************************************************************************************************
+2020-10-01 10:22:55,028 p=11991 u=curso n=ansible | fatal: [servera.lab.exammple.com]: UNREACHABLE! => {"changed": false, "msg": "Failed to connect to the host via ssh: ssh: connect to host servera.lab.exammple.com port 22: Connection timed out", "unreachable": true}
+2020-10-01 10:22:55,029 p=11991 u=curso n=ansible | PLAY RECAP ************************************************************************************************************
+2020-10-01 10:22:55,029 p=11991 u=curso n=ansible | servera.lab.exammple.com   : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0   
+2020-10-01 10:23:32,998 p=12143 u=curso n=ansible | ansible-playbook 2.9.13
+  config file = /home/curso/ansible2/troubleshoot-playbook/ansible.cfg
+  configured module search path = [u'/home/curso/.ansible/plugins/modules', u'/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/lib/python2.7/dist-packages/ansible
+  executable location = /usr/bin/ansible-playbook
+  python version = 2.7.17 (default, Jul 20 2020, 15:37:01) [GCC 7.5.0]
+2020-10-01 10:23:32,999 p=12143 u=curso n=ansible | Using /home/curso/ansible2/troubleshoot-playbook/ansible.cfg as config file
+2020-10-01 10:23:32,999 p=12143 u=curso n=ansible | setting up inventory plugins
+2020-10-01 10:23:33,005 p=12143 u=curso n=ansible | host_list declined parsing /home/curso/ansible2/troubleshoot-playbook/inventory as it did not pass its verify_file() method
+2020-10-01 10:23:33,005 p=12143 u=curso n=ansible | script declined parsing /home/curso/ansible2/troubleshoot-playbook/inventory as it did not pass its verify_file() method
+2020-10-01 10:23:33,005 p=12143 u=curso n=ansible | auto declined parsing /home/curso/ansible2/troubleshoot-playbook/inventory as it did not pass its verify_file() method
+2020-10-01 10:23:33,009 p=12143 u=curso n=ansible | Parsed /home/curso/ansible2/troubleshoot-playbook/inventory inventory source with ini plugin
+2020-10-01 10:23:33,177 p=12143 u=curso n=ansible | Loading callback plugin default of type stdout, v2.0 from /usr/lib/python2.7/dist-packages/ansible/plugins/callback/default.pyc
+2020-10-01 10:23:33,216 p=12143 u=curso n=ansible | PLAYBOOK: samba.yml ***************************************************************************************************
+2020-10-01 10:23:33,217 p=12143 u=curso n=ansible | 1 plays in samba.yml
+2020-10-01 10:23:33,220 p=12143 u=curso n=ansible | PLAY [Install a samba server] *****************************************************************************************
+2020-10-01 10:23:33,230 p=12143 u=curso n=ansible | TASK [Gathering Facts] ************************************************************************************************
+2020-10-01 10:23:33,243 p=12150 u=curso n=ansible | <servera.lab.exammple.com> ESTABLISH SSH CONNECTION FOR USER: curso
+2020-10-01 10:23:33,244 p=12150 u=curso n=ansible | <servera.lab.exammple.com> SSH: EXEC ssh -vvv -C -o ControlMaster=auto -o ControlPersist=60s -o KbdInteractiveAuthentication=no -o PreferredAuthentications=gssapi-with-mic,gssapi-keyex,hostbased,publickey -o PasswordAuthentication=no -o 'User="curso"' -o ConnectTimeout=10 -o ControlPath=/home/curso/.ansible/cp/4e90f9661f servera.lab.exammple.com '/bin/sh -c '"'"'echo ~curso && sleep 0'"'"''
+2020-10-01 10:23:43,307 p=12150 u=curso n=ansible | <servera.lab.exammple.com> (255, '', 'OpenSSH_7.6p1 Ubuntu-4ubuntu0.3, OpenSSL 1.0.2n  7 Dec 2017\r\ndebug1: Reading configuration data /etc/ssh/ssh_config\r\ndebug1: /etc/ssh/ssh_config line 19: Applying options for *\r\ndebug1: auto-mux: Trying existing master\r\ndebug1: Control socket "/home/curso/.ansible/cp/4e90f9661f" does not exist\r\ndebug2: resolving "servera.lab.exammple.com" port 22\r\ndebug2: ssh_connect_direct: needpriv 0\r\ndebug1: Connecting to servera.lab.exammple.com [18.211.9.206] port 22.\r\ndebug2: fd 3 setting O_NONBLOCK\r\ndebug1: connect to address 18.211.9.206 port 22: Connection timed out\r\nssh: connect to host servera.lab.exammple.com port 22: Connection timed out\r\n')
+2020-10-01 10:23:43,311 p=12143 u=curso n=ansible | fatal: [servera.lab.exammple.com]: UNREACHABLE! => {
+    "changed": false, 
+    "msg": "Failed to connect to the host via ssh: OpenSSH_7.6p1 Ubuntu-4ubuntu0.3, OpenSSL 1.0.2n  7 Dec 2017\r\ndebug1: Reading configuration data /etc/ssh/ssh_config\r\ndebug1: /etc/ssh/ssh_config line 19: Applying options for *\r\ndebug1: auto-mux: Trying existing master\r\ndebug1: Control socket \"/home/curso/.ansible/cp/4e90f9661f\" does not exist\r\ndebug2: resolving \"servera.lab.exammple.com\" port 22\r\ndebug2: ssh_connect_direct: needpriv 0\r\ndebug1: Connecting to servera.lab.exammple.com [18.211.9.206] port 22.\r\ndebug2: fd 3 setting O_NONBLOCK\r\ndebug1: connect to address 18.211.9.206 port 22: Connection timed out\r\nssh: connect to host servera.lab.exammple.com port 22: Connection timed out", 
+    "unreachable": true
+}
+2020-10-01 10:23:43,312 p=12143 u=curso n=ansible | PLAY RECAP ************************************************************************************************************
+2020-10-01 10:23:43,312 p=12143 u=curso n=ansible | servera.lab.exammple.com   : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0   
+2020-10-01 10:25:36,058 p=12224 u=curso n=ansible | PLAY [Install a samba server] *****************************************************************************************
+2020-10-01 10:25:36,071 p=12224 u=curso n=ansible | TASK [Gathering Facts] ************************************************************************************************
+2020-10-01 10:25:38,945 p=12224 u=curso n=ansible | [DEPRECATION WARNING]: Distribution Ubuntu 18.04 on host servera.lab.example.com should use /usr/bin/python3, but is 
+using /usr/bin/python for backward compatibility with prior Ansible releases. A future Ansible release will default to
+ using the discovered platform python for this host. See 
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information. This 
+feature will be removed in version 2.12. Deprecation warnings can be disabled by setting deprecation_warnings=False in
+ ansible.cfg.
+2020-10-01 10:25:38,946 p=12224 u=curso n=ansible | ok: [servera.lab.example.com]
+2020-10-01 10:25:38,969 p=12224 u=curso n=ansible | TASK [install samba] **************************************************************************************************
+2020-10-01 10:25:41,330 p=12224 u=curso n=ansible | ok: [servera.lab.example.com]
+2020-10-01 10:25:41,353 p=12224 u=curso n=ansible | TASK [install firewalld] **********************************************************************************************
+2020-10-01 10:25:43,025 p=12224 u=curso n=ansible | ok: [servera.lab.example.com]
+2020-10-01 10:25:43,047 p=12224 u=curso n=ansible | TASK [debug install_state variable] ***********************************************************************************
+2020-10-01 10:25:43,072 p=12224 u=curso n=ansible | ok: [servera.lab.example.com] => {
+    "msg": "The state for the samba service is present"
+}
+2020-10-01 10:25:43,092 p=12224 u=curso n=ansible | TASK [start samba] ****************************************************************************************************
+2020-10-01 10:25:43,971 p=12224 u=curso n=ansible | ok: [servera.lab.example.com]
+2020-10-01 10:25:44,019 p=12224 u=curso n=ansible | TASK [start firewalld] ************************************************************************************************
+2020-10-01 10:25:44,562 p=12224 u=curso n=ansible | ok: [servera.lab.example.com]
+2020-10-01 10:25:44,585 p=12224 u=curso n=ansible | TASK [configure firewall for samba] ***********************************************************************************
+2020-10-01 10:25:45,280 p=12224 u=curso n=ansible | ok: [servera.lab.example.com]
+2020-10-01 10:25:45,304 p=12224 u=curso n=ansible | TASK [deliver samba config] *******************************************************************************************
+2020-10-01 10:25:45,378 p=12224 u=curso n=ansible | fatal: [servera.lab.example.com]: FAILED! => {"changed": false, "msg": "Could not find or access 'samba.j2'\nSearched in:\n\t/home/curso/ansible2/troubleshoot-playbook/templates/samba.j2\n\t/home/curso/ansible2/troubleshoot-playbook/samba.j2\n\t/home/curso/ansible2/troubleshoot-playbook/templates/samba.j2\n\t/home/curso/ansible2/troubleshoot-playbook/samba.j2 on the Ansible Controller.\nIf you are using a module and expect the file to exist on the remote, see the remote_src option"}
+2020-10-01 10:25:45,379 p=12224 u=curso n=ansible | PLAY RECAP ************************************************************************************************************
+2020-10-01 10:25:45,380 p=12224 u=curso n=ansible | servera.lab.example.com    : ok=7    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2020-10-01 10:26:00,680 p=12689 u=curso n=ansible | PLAY [Install a samba server] *****************************************************************************************
+2020-10-01 10:26:00,692 p=12689 u=curso n=ansible | TASK [Gathering Facts] ************************************************************************************************
+2020-10-01 10:26:02,028 p=12689 u=curso n=ansible | [DEPRECATION WARNING]: Distribution Ubuntu 18.04 on host servera.lab.example.com should use /usr/bin/python3, but is 
+using /usr/bin/python for backward compatibility with prior Ansible releases. A future Ansible release will default to
+ using the discovered platform python for this host. See 
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information. This 
+feature will be removed in version 2.12. Deprecation warnings can be disabled by setting deprecation_warnings=False in
+ ansible.cfg.
+2020-10-01 10:26:02,028 p=12689 u=curso n=ansible | ok: [servera.lab.example.com]
+2020-10-01 10:26:02,052 p=12689 u=curso n=ansible | TASK [install samba] **************************************************************************************************
+2020-10-01 10:26:04,341 p=12689 u=curso n=ansible | ok: [servera.lab.example.com]
+2020-10-01 10:26:04,386 p=12689 u=curso n=ansible | TASK [install firewalld] **********************************************************************************************
+2020-10-01 10:26:06,069 p=12689 u=curso n=ansible | ok: [servera.lab.example.com]
+2020-10-01 10:26:06,091 p=12689 u=curso n=ansible | TASK [debug install_state variable] ***********************************************************************************
+2020-10-01 10:26:06,117 p=12689 u=curso n=ansible | ok: [servera.lab.example.com] => {
+    "msg": "The state for the samba service is present"
+}
+2020-10-01 10:26:06,139 p=12689 u=curso n=ansible | TASK [start samba] ****************************************************************************************************
+2020-10-01 10:26:06,967 p=12689 u=curso n=ansible | ok: [servera.lab.example.com]
+2020-10-01 10:26:06,988 p=12689 u=curso n=ansible | TASK [start firewalld] ************************************************************************************************
+2020-10-01 10:26:07,619 p=12689 u=curso n=ansible | ok: [servera.lab.example.com]
+2020-10-01 10:26:07,660 p=12689 u=curso n=ansible | TASK [configure firewall for samba] ***********************************************************************************
+2020-10-01 10:26:09,107 p=12689 u=curso n=ansible | ok: [servera.lab.example.com]
+2020-10-01 10:26:09,168 p=12689 u=curso n=ansible | TASK [deliver samba config] *******************************************************************************************
+2020-10-01 10:26:10,552 p=12689 u=curso n=ansible | ok: [servera.lab.example.com]
+2020-10-01 10:26:10,555 p=12689 u=curso n=ansible | PLAY RECAP ************************************************************************************************************
+2020-10-01 10:26:10,556 p=12689 u=curso n=ansible | servera.lab.example.com    : ok=8    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2020-10-01 10:26:24,149 p=13091 u=curso n=ansible | PLAY [Install a samba server] *****************************************************************************************
+2020-10-01 10:26:26,428 p=13091 u=curso n=ansible | Perform task: TASK: Gathering Facts (N)o/(y)es/(c)ontinue: ************************************************************
+2020-10-01 10:26:26,433 p=13091 u=curso n=ansible | TASK [Gathering Facts] ************************************************************************************************
+2020-10-01 10:26:27,689 p=13091 u=curso n=ansible | [DEPRECATION WARNING]: Distribution Ubuntu 18.04 on host servera.lab.example.com should use /usr/bin/python3, but is 
+using /usr/bin/python for backward compatibility with prior Ansible releases. A future Ansible release will default to
+ using the discovered platform python for this host. See 
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information. This 
+feature will be removed in version 2.12. Deprecation warnings can be disabled by setting deprecation_warnings=False in
+ ansible.cfg.
+2020-10-01 10:26:27,689 p=13091 u=curso n=ansible | ok: [servera.lab.example.com]
+2020-10-01 10:26:28,877 p=13091 u=curso n=ansible | Perform task: TASK: install samba (N)o/(y)es/(c)ontinue: **************************************************************
+2020-10-01 10:26:28,900 p=13091 u=curso n=ansible | TASK [install samba] **************************************************************************************************
+2020-10-01 10:26:30,759 p=13091 u=curso n=ansible | ok: [servera.lab.example.com]
+2020-10-01 10:26:31,624 p=13091 u=curso n=ansible | Perform task: TASK: install firewalld (N)o/(y)es/(c)ontinue: **********************************************************
+2020-10-01 10:26:31,647 p=13091 u=curso n=ansible | TASK [install firewalld] **********************************************************************************************
+2020-10-01 10:26:33,554 p=13091 u=curso n=ansible | ok: [servera.lab.example.com]
+2020-10-01 10:26:34,585 p=13091 u=curso n=ansible | Perform task: TASK: debug install_state variable (N)o/(y)es/(c)ontinue: ***********************************************
+2020-10-01 10:26:34,613 p=13091 u=curso n=ansible | TASK [debug install_state variable] ***********************************************************************************
+2020-10-01 10:26:34,660 p=13091 u=curso n=ansible | ok: [servera.lab.example.com] => {
+    "msg": "The state for the samba service is present"
+}
+2020-10-01 10:26:35,806 p=13091 u=curso n=ansible | Perform task: TASK: start samba (N)o/(y)es/(c)ontinue: ****************************************************************
+2020-10-01 10:26:35,828 p=13091 u=curso n=ansible | TASK [start samba] ****************************************************************************************************
+2020-10-01 10:26:36,625 p=13091 u=curso n=ansible | ok: [servera.lab.example.com]
+2020-10-01 10:26:37,608 p=13091 u=curso n=ansible | Perform task: TASK: start firewalld (N)o/(y)es/(c)ontinue: ************************************************************
+2020-10-01 10:26:37,630 p=13091 u=curso n=ansible | TASK [start firewalld] ************************************************************************************************
+2020-10-01 10:26:38,091 p=13091 u=curso n=ansible | ok: [servera.lab.example.com]
+2020-10-01 10:26:38,908 p=13091 u=curso n=ansible | Perform task: TASK: configure firewall for samba (N)o/(y)es/(c)ontinue: ***********************************************
+2020-10-01 10:26:38,930 p=13091 u=curso n=ansible | TASK [configure firewall for samba] ***********************************************************************************
+2020-10-01 10:26:39,670 p=13091 u=curso n=ansible | ok: [servera.lab.example.com]
+2020-10-01 10:26:40,288 p=13091 u=curso n=ansible | Perform task: TASK: deliver samba config (N)o/(y)es/(c)ontinue: *******************************************************
+2020-10-01 10:26:40,310 p=13091 u=curso n=ansible | TASK [deliver samba config] *******************************************************************************************
+2020-10-01 10:26:41,417 p=13091 u=curso n=ansible | ok: [servera.lab.example.com]
+2020-10-01 10:26:41,419 p=13091 u=curso n=ansible | PLAY RECAP ************************************************************************************************************
+2020-10-01 10:26:41,419 p=13091 u=curso n=ansible | servera.lab.example.com    : ok=8    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   

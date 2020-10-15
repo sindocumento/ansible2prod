@@ -1,0 +1,21 @@
+---
+- name: Schedule at task
+  hosts: webservers
+  become: true
+  become_user: curso
+
+  tasks:
+
+    - name: Install at
+      yum:
+        name: at
+        state: present
+
+    - name: Create date and time file
+      at:
+        command: "date > ~/my_at_date_time\n"
+        count: 1
+        units: minutes
+        unique: yes
+        state: present
+

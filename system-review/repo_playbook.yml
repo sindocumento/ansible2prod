@@ -1,0 +1,20 @@
+---
+- name: Repository Configuration
+  hosts: webservers
+  tasks:
+    - name: Ensure Example Repo exists
+      yum_repository:
+        name: example-internal
+        description: Example Inc. Internal YUM repo
+        file: example
+        baseurl: https://dl.fedoraproject.org/pub/epel/8/Everything/x86_64/
+        gpgcheck: yes
+    - name: Ensure Repo RPM Key is Installed
+      rpm_key:
+        key: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8
+        state: present
+    - name: Install httpd package
+      yum:
+        name: httpd
+        state: present
+

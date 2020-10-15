@@ -1,0 +1,12 @@
+---
+- name: Installing MariaDB server
+  hosts: databases
+  vars:
+    db_packages:
+      - mariadb-server
+    db_service: mariadb
+    resources_url: https://raw.githubusercontent.com/ocp4labs/ansible2/master/control-handlers
+    config_file_url: "{{ resources_url }}/my.cnf.standard"
+    config_file_dst: /etc/my.cnf
+  tasks:
+

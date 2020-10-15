@@ -1,0 +1,10 @@
+---
+- hosts: dbservers
+  tasks:
+    - service:
+        name: postgresql
+        enabled: no
+        state: stopped
+    - yum:
+        name: postgresql
+        state: absent
