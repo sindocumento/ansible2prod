@@ -26,15 +26,6 @@
         name: firewalld
         enabled: true
         state: started
-
-    - name: Open the port for http
-      firewalld:
-        service: http
-        immediate: true
-        permanent: true
-        state: enabled
-      notify:
-        - restart apache        
         
   handlers:
     - name: restart apache
